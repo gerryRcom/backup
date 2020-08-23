@@ -1,11 +1,8 @@
 ECHO OFF
 CLS
 SET SourceFolder1=C:\DATA
-SET SourceFolder1Sync=%SourceFolder1%\sync
 SET SourceFolder2=C:\DATA
-SET SourceFolder2Sync=%SourceFolder2%\sync
 SET SourceFolder3=C:\DATA
-SET SourceFolder3Sync=%SourceFolder3%\sync
 SET LogFile=backup-log.txt
 
 SET DestinationServer=192.168.122.203
@@ -26,9 +23,17 @@ net use %DestinationPath% /user:%DestinationServer%\%DestinationUser% %Destinati
 
 REM #1 ROBOCOPY %SourceFolder1% %DestinationPath% /MIR /NOCOPY /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
 
-REM DEL %SourceFolder1%\sync\*.* /Q
-ROBOCOPY %SourceFolder1% %SourceFolder1Sync% /MAXAGE:1 /PURGE /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
-ROBOCOPY %SourceFolder1Sync% %DestinationPath1% /MIR /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
+DEL %SourceFolder1%\sync\*.* /Q
+ROBOCOPY %SourceFolder1% %SourceFolder1%\sync /MAXAGE:1 /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
+ROBOCOPY %SourceFolder1%\sync %DestinationPath1% /MIR /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
+
+DEL %SourceFolder2%\sync\*.* /Q
+ROBOCOPY %SourceFolder2% %SourceFolder2%\sync /MAXAGE:1 /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
+ROBOCOPY %SourceFolder2%\sync %DestinationPath2% /MIR /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
+
+DEL %SourceFolder3%\sync\*.* /Q
+ROBOCOPY %SourceFolder3% %SourceFolder3%\sync /MAXAGE:1 /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
+ROBOCOPY %SourceFolder3%\sync %DestinationPath3% /MIR /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
 
 REM #1 ## Cleanup by moving local files to arch folder for deletion on next run
 REM #1 ## Cleanup by closing connection to remote server.
