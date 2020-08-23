@@ -7,9 +7,9 @@ SET LogFile=backup-log.txt
 
 SET DestinationServer=192.168.122.203
 SET DestinationPath=\\%DestinationServer%\mybackups$
-SET DestinationPath1=%DestinationPath%\bup1
-SET DestinationPath2=%DestinationPath%\bup2
-SET DestinationPath3=%DestinationPath%\bup3
+SET DestinationFolder1=%DestinationPath%\bup1
+SET DestinationFolder2=%DestinationPath%\bup2
+SET DestinationFolder3=%DestinationPath%\bup3
 
 REM ## Make sure to use limited remote user/ password if required that only has access to folder
 SET DestinationUser=basicuser1
@@ -25,15 +25,15 @@ REM #1 ROBOCOPY %SourceFolder1% %DestinationPath% /MIR /NOCOPY /R:1 /W:1 /LEV:1 
 
 DEL %SourceFolder1%\sync\*.* /Q
 ROBOCOPY %SourceFolder1% %SourceFolder1%\sync /MAXAGE:1 /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
-ROBOCOPY %SourceFolder1%\sync %DestinationPath1% /MIR /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
+ROBOCOPY %SourceFolder1%\sync %DestinationFolder1% /MIR /R:1 /W:1 /LOG+:%LogFile%
 
 DEL %SourceFolder2%\sync\*.* /Q
 ROBOCOPY %SourceFolder2% %SourceFolder2%\sync /MAXAGE:1 /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
-ROBOCOPY %SourceFolder2%\sync %DestinationPath2% /MIR /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
+ROBOCOPY %SourceFolder2%\sync %DestinationFolder2% /MIR /R:1 /W:1 /LOG+:%LogFile%
 
 DEL %SourceFolder3%\sync\*.* /Q
 ROBOCOPY %SourceFolder3% %SourceFolder3%\sync /MAXAGE:1 /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
-ROBOCOPY %SourceFolder3%\sync %DestinationPath3% /MIR /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
+ROBOCOPY %SourceFolder3%\sync %DestinationFolder3% /MIR /R:1 /W:1 /LOG+:%LogFile%
 
 REM #1 ## Cleanup by moving local files to arch folder for deletion on next run
 REM #1 ## Cleanup by closing connection to remote server.
