@@ -1,3 +1,5 @@
+REM ## Sept 2020 (initial version)
+REM ##
 ECHO OFF
 CLS
 SET SourceServer=\\10.0.2.4\SysActive$
@@ -38,3 +40,28 @@ ROBOCOPY %SourceFolder4% %DestinationFolder4% /MAXAGE:1 /R:1 /W:1 /LEV:1 /LOG+:%
 REM ## Closing connection to remote server.
 REM ##
 NET USE %SourceServer% /delete
+
+REM ## Config below for second backup which is local to local
+REM ##
+SET LocalSource1=C:\SysContent\LS1
+SET LocalSource2=C:\SysContent\LS2
+SET LocalSource3=C:\SysContent\LS3
+SET LocalSource4=C:\SysContent\LS4
+
+SET LocalDestination1=C:\mybackups\LB1
+SET LocalDestination2=C:\mybackups\LB2
+SET LocalDestination3=C:\mybackups\LB3
+SET LocalDestination4=C:\mybackups\LB4
+
+REM ## First two folders we're just taking a copy of the most recent files (1 day old)
+REM ##
+DEL %LocalDestination1%\*.* /Q
+ROBOCOPY %LocalSource1% %LocalDestination1% /MAXAGE:1 /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
+
+DEL %LocalDestination2%\*.* /Q
+ROBOCOPY %LocalSource2% %LocalDestination2% /MAXAGE:1 /R:1 /W:1 /LEV:1 /LOG+:%LogFile%
+
+REM ## Second two folders we're taking a mirror copy of the folders
+REM ##
+ROBOCOPY %LocalSource3% %LocalDestination3% /MIR /R:1 /W:1 /LOG+:%LogFile%
+ROBOCOPY %LocalSource4% %LocalDestination4% /MIR /R:1 /W:1 /LOG+:%LogFile%
